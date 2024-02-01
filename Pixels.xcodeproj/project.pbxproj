@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		CB3F58FF2A2260B0002E3B30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F58FE2A2260B0002E3B30 /* AppDelegate.swift */; };
 		CB3F59012A2260B0002E3B30 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59002A2260B0002E3B30 /* SceneDelegate.swift */; };
-		CB3F59032A2260B0002E3B30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59022A2260B0002E3B30 /* ViewController.swift */; };
+		CB3F59032A2260B0002E3B30 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59022A2260B0002E3B30 /* CameraViewController.swift */; };
 		CB3F59082A2260B1002E3B30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3F59072A2260B1002E3B30 /* Assets.xcassets */; };
 		CB3F590B2A2260B1002E3B30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB3F59092A2260B1002E3B30 /* LaunchScreen.storyboard */; };
 		CBDA9DFA2A253B1A007133C9 /* ImagesCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDA9DF92A253B1A007133C9 /* ImagesCollectionLayout.swift */; };
@@ -22,7 +22,7 @@
 		CB3F58FB2A2260B0002E3B30 /* Pixels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pixels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB3F58FE2A2260B0002E3B30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB3F59002A2260B0002E3B30 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CB3F59022A2260B0002E3B30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CB3F59022A2260B0002E3B30 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		CB3F59072A2260B1002E3B30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB3F590A2A2260B1002E3B30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB3F590C2A2260B1002E3B30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		CB3F59132A2260BF002E3B30 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				CB3F59022A2260B0002E3B30 /* ViewController.swift */,
+				CB3F59022A2260B0002E3B30 /* CameraViewController.swift */,
 				CBDA9DF92A253B1A007133C9 /* ImagesCollectionLayout.swift */,
 				CBDA9DFB2A253BC0007133C9 /* ImageCell.swift */,
 				CBDA9DFD2A253C7F007133C9 /* ImagesViewModel.swift */,
@@ -126,8 +126,9 @@
 		CB3F58F32A2260B0002E3B30 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					CB3F58FA2A2260B0002E3B30 = {
 						CreatedOnToolsVersion = 12.5;
@@ -170,7 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBDA9DFE2A253C7F007133C9 /* ImagesViewModel.swift in Sources */,
-				CB3F59032A2260B0002E3B30 /* ViewController.swift in Sources */,
+				CB3F59032A2260B0002E3B30 /* CameraViewController.swift in Sources */,
 				CB3F58FF2A2260B0002E3B30 /* AppDelegate.swift in Sources */,
 				CBDA9E002A254D93007133C9 /* ImageViewController.swift in Sources */,
 				CB3F59012A2260B0002E3B30 /* SceneDelegate.swift in Sources */,
@@ -230,6 +231,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -291,6 +293,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

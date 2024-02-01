@@ -8,8 +8,7 @@
 import UIKit
 import AVFoundation
 import Combine
-class ViewController: UIViewController {
-    
+class CameraViewController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = ImagesViewModel()
@@ -162,7 +161,7 @@ class ViewController: UIViewController {
 
 // MARK: - AVCapturePhotoCaptureDelegate
 
-extension ViewController: AVCapturePhotoCaptureDelegate {
+extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
             print("Error capturing photo: \(error?.localizedDescription ?? "")")
@@ -178,7 +177,7 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
         if let error = error {
             // we got back an error!
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
             present(ac, animated: true)
         } else {
         
@@ -207,7 +206,7 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
         }
     }
 }
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CameraViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let imageViewController  = ImageViewController(fullSizeImage: viewModel.imageAt(indexPath: indexPath))
@@ -244,7 +243,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
 }
-extension ViewController: UIScrollViewDelegate {
+extension CameraViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
