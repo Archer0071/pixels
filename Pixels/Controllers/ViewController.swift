@@ -10,7 +10,6 @@ import AVFoundation
 import Combine
 class ViewController: UIViewController {
     
-    
     // MARK: - Properties
     private var viewModel = ImagesViewModel()
     private var isLoading = false
@@ -178,7 +177,7 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
         if let error = error {
             // we got back an error!
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            ac.addAction(UIAlertAction(title: "Ok", style: .default))
             present(ac, animated: true)
         } else {
         
