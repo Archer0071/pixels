@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3E6A7E72B7024B600A5F4E4 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E6A7E62B7024B600A5F4E4 /* ImageModel.swift */; };
+		B3E6A7E92B70297600A5F4E4 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E6A7E82B70297600A5F4E4 /* UIImage+Extension.swift */; };
 		CB3F58FF2A2260B0002E3B30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F58FE2A2260B0002E3B30 /* AppDelegate.swift */; };
 		CB3F59012A2260B0002E3B30 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59002A2260B0002E3B30 /* SceneDelegate.swift */; };
-		CB3F59032A2260B0002E3B30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59022A2260B0002E3B30 /* ViewController.swift */; };
+		CB3F59032A2260B0002E3B30 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3F59022A2260B0002E3B30 /* CameraViewController.swift */; };
 		CB3F59082A2260B1002E3B30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB3F59072A2260B1002E3B30 /* Assets.xcassets */; };
 		CB3F590B2A2260B1002E3B30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB3F59092A2260B1002E3B30 /* LaunchScreen.storyboard */; };
 		CBDA9DFA2A253B1A007133C9 /* ImagesCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDA9DF92A253B1A007133C9 /* ImagesCollectionLayout.swift */; };
@@ -19,10 +21,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B3E6A7E62B7024B600A5F4E4 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		B3E6A7E82B70297600A5F4E4 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		CB3F58FB2A2260B0002E3B30 /* Pixels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pixels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB3F58FE2A2260B0002E3B30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB3F59002A2260B0002E3B30 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CB3F59022A2260B0002E3B30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CB3F59022A2260B0002E3B30 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		CB3F59072A2260B1002E3B30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB3F590A2A2260B1002E3B30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB3F590C2A2260B1002E3B30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,11 +86,13 @@
 		CB3F59132A2260BF002E3B30 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				CB3F59022A2260B0002E3B30 /* ViewController.swift */,
+				CB3F59022A2260B0002E3B30 /* CameraViewController.swift */,
 				CBDA9DF92A253B1A007133C9 /* ImagesCollectionLayout.swift */,
 				CBDA9DFB2A253BC0007133C9 /* ImageCell.swift */,
 				CBDA9DFD2A253C7F007133C9 /* ImagesViewModel.swift */,
 				CBDA9DFF2A254D93007133C9 /* ImageViewController.swift */,
+				B3E6A7E62B7024B600A5F4E4 /* ImageModel.swift */,
+				B3E6A7E82B70297600A5F4E4 /* UIImage+Extension.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -170,12 +176,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBDA9DFE2A253C7F007133C9 /* ImagesViewModel.swift in Sources */,
-				CB3F59032A2260B0002E3B30 /* ViewController.swift in Sources */,
+				CB3F59032A2260B0002E3B30 /* CameraViewController.swift in Sources */,
 				CB3F58FF2A2260B0002E3B30 /* AppDelegate.swift in Sources */,
+				B3E6A7E92B70297600A5F4E4 /* UIImage+Extension.swift in Sources */,
 				CBDA9E002A254D93007133C9 /* ImageViewController.swift in Sources */,
 				CB3F59012A2260B0002E3B30 /* SceneDelegate.swift in Sources */,
 				CBDA9DFA2A253B1A007133C9 /* ImagesCollectionLayout.swift in Sources */,
 				CBDA9DFC2A253BC0007133C9 /* ImageCell.swift in Sources */,
+				B3E6A7E72B7024B600A5F4E4 /* ImageModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +324,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2QM47272HP;
+				DEVELOPMENT_TEAM = 786XFML3S8;
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -329,6 +337,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -341,7 +350,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2QM47272HP;
+				DEVELOPMENT_TEAM = 786XFML3S8;
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -354,6 +363,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

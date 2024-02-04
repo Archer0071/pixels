@@ -9,63 +9,101 @@ import Foundation
 import Photos
 import UIKit
 import Combine
-class ImagesViewModel:ObservableObject {
+
+class ImagesViewModel: ObservableObject {
     private var currentPage: Int = 0
     private var pageSize: Int = 20 // Set an initial page size
-    var images: [UIImage] = []
-    func fetchPhotos(completion: @escaping ([UIImage], Bool) -> Void) {
+    @Published var imagePairs: [ImageModel] = []
+    var isSelected = false
+    private var cancellables: Set<AnyCancellable> = []
+
+    func fetchPhotos() {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         options.fetchLimit = pageSize
 
         let fetchResult = PHAsset.fetchAssets(with: .image, options: options)
 
-        var newImages: [UIImage] = []
-
         let startIndex = currentPage * pageSize
         let endIndex = min(startIndex + pageSize, fetchResult.count)
 
         if startIndex >= endIndex {
-            completion([], false)
             return
         }
 
+        var newImageModels: [ImageModel] = []
+
         for index in startIndex..<endIndex {
             let asset = fetchResult.object(at: index)
-            let requestOptions = PHImageRequestOptions()
-            requestOptions.isSynchronous = true
 
-            PHImageManager.default().requestImage(
-                for: asset,
-                targetSize: CGSize(width: 200, height: 200),
-                contentMode: .aspectFill,
-                options: requestOptions
-            ) { image, _ in
-                if let image = image {
-                    newImages.append(image)
+            let fullSizePublisher = Future<UIImage, Error> { promise in
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isSynchronous = true
+
+                PHImageManager.default().requestImage(
+                    for: asset,
+                    targetSize: PHImageManagerMaximumSize,
+                    contentMode: .aspectFill,
+                    options: requestOptions
+                ) { fullSizeImage, _ in
+                    if let fullSizeImage = fullSizeImage {
+                        promise(.success(fullSizeImage))
+                    } else {
+                        promise(.failure(NSError(domain: "Image Fetch Error", code: 1, userInfo: nil)))
+                    }
                 }
             }
+
+            let thumbnailPublisher = Future<UIImage, Error> { promise in
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isSynchronous = true
+
+                PHImageManager.default().requestImage(
+                    for: asset,
+                    targetSize: CGSize(width: 200, height: 200),
+                    contentMode: .aspectFill,
+                    options: requestOptions
+                ) { thumbnailImage, _ in
+                    if let thumbnailImage = thumbnailImage {
+                        promise(.success(thumbnailImage))
+                    } else {
+                        promise(.failure(NSError(domain: "Image Fetch Error", code: 1, userInfo: nil)))
+                    }
+                }
+            }
+
+            Publishers.CombineLatest(fullSizePublisher, thumbnailPublisher)
+                .sink { completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("Error fetching images: \(error)")
+                    }
+                } receiveValue: { (fullSizeImage, thumbnailImage) in
+                    let imageModel = ImageModel(fullSize: fullSizeImage, thumbnail: thumbnailImage)
+                    newImageModels.append(imageModel)
+                }
+                .store(in: &cancellables)
         }
 
-        images.append(contentsOf: newImages)
+        imagePairs.append(contentsOf: newImageModels)
         currentPage += 1
-
-        // Check if there are more images available
-        let hasMoreImages = fetchResult.count > currentPage * pageSize
-
-        completion(newImages, hasMoreImages)
     }
 
-    func resetPagination(){
+    func resetPagination() {
         self.currentPage = 0
         self.pageSize = 20
+        self.imagePairs = []
     }
-    //return total No of Images stored
-    func totalImages() -> Int {
-        return images.count
+
+    // Return total number of image pairs stored
+    func totalImagePairs() -> Int {
+        return imagePairs.count
     }
-    // return the image by passing the indexPath of cell
-    func imageAt(indexPath:IndexPath) -> UIImage {
-       return images[indexPath.row]
+
+    // Return the image model by passing the index of the pair
+    func imageModelAt(index: Int) -> ImageModel {
+        return imagePairs[index]
     }
 }

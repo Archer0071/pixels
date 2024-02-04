@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 import Combine
-class ViewController: UIViewController {
+class CameraViewController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = ImagesViewModel()
@@ -66,6 +66,7 @@ class ViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        viewModel.isSelected = false
         stopCaptureSession()
     }
     
@@ -110,23 +111,10 @@ class ViewController: UIViewController {
         
     }
     private func fetchPhotos() {
-        isLoading = true
+           isLoading = true
 
-        viewModel.fetchPhotos { [weak self] images, hasMoreImages in
-            // Handle the fetched images and update the UI accordingly
-            DispatchQueue.main.async {
-                // Update UI with the fetched images
-                // Example: reload collection view data
-                self?.collectionView.reloadData()
-
-                self?.isLoading = false
-
-                if hasMoreImages {
-                    self?.fetchPhotos()
-                }
-            }
-        }
-    }
+           viewModel.fetchPhotos()
+       }
 
     private func resetPaginationAndReload() {
         viewModel.resetPagination() // Reset the pagination count
@@ -161,7 +149,7 @@ class ViewController: UIViewController {
 
 // MARK: - AVCapturePhotoCaptureDelegate
 
-extension ViewController: AVCapturePhotoCaptureDelegate {
+extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
             print("Error capturing photo: \(error?.localizedDescription ?? "")")
@@ -169,10 +157,31 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
         }
         // Show the captured image briefly
         showImageAnimated(image:image)
-        
+        handleCapturedPhoto(photo)
         // Save or display the captured image
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
+    private func handleCapturedPhoto(_ photo: AVCapturePhoto) {
+        guard let imageData = photo.fileDataRepresentation(),
+              let fullSizeImage = UIImage(data: imageData) else {
+            // Handle error if unable to get image data or create UIImage
+            return
+        }
+
+        let thumbnailSize = CGSize(width: 200, height: 200)
+        guard let thumbnailImage = fullSizeImage.resized(to: thumbnailSize) else {
+            // Handle error if unable to create thumbnail
+            return
+        }
+
+        // Create an ImageModel and add it to the beginning of the array
+        let imageModel = ImageModel(fullSize: fullSizeImage, thumbnail: thumbnailImage)
+        DispatchQueue.main.async {
+            self.viewModel.imagePairs.insert(imageModel, at: 0)
+            self.collectionView.reloadData()
+        }
+    }
+    
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // we got back an error!
@@ -205,12 +214,50 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
             }
         }
     }
+    
+    func animateTransition(from imageView: UIImageView?,image:UIImage?) {
+        guard let imageView = imageView, let image = image else { return }
+        let fullScreenViewController = ImageViewController(fullSizeImage: image)
+
+        let snapshotImageView = UIImageView(image: image)
+        snapshotImageView.contentMode = .scaleAspectFill
+        snapshotImageView.clipsToBounds = true
+        snapshotImageView.frame = imageView.convert(imageView.bounds, to: nil)
+
+        imageView.isHidden = true
+
+        // Add the snapshot to the current scene's key window
+        if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            keyWindow.addSubview(snapshotImageView)
+        }
+
+        let targetFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+
+        // Apply a scaling transformation to create a bouncy effect
+        snapshotImageView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+            snapshotImageView.transform = .identity
+            snapshotImageView.frame = targetFrame
+        }) { _ in
+            snapshotImageView.removeFromSuperview()
+            imageView.isHidden = false
+            self.navigationController?.pushViewController(fullScreenViewController, animated: false)
+        }
+    }
+
+
+
+
 }
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CameraViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let imageViewController  = ImageViewController(fullSizeImage: viewModel.imageAt(indexPath: indexPath))
-        navigationController?.pushViewController(imageViewController, animated: true)
+        guard let selectedCell = collectionView.cellForItem(at: indexPath) as? ImageCell else {
+                return
+            }
+        viewModel.isSelected = true
+        animateTransition(from: selectedCell.imageView, image: viewModel.imageModelAt(index: indexPath.row).fullSize)
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // Return the number of sections in your collection view (e.g., 1 if you have only one section)
@@ -219,13 +266,13 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Return the total number of images you have to display
-        return viewModel.totalImages()
+        return viewModel.totalImagePairs()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
         // Configure the cell with the corresponding image
-        cell.imageView.image = viewModel.imageAt(indexPath: indexPath)
+        cell.imageView.image = viewModel.imageModelAt(index: indexPath.row).thumbnail
         
         return cell
     }
@@ -243,7 +290,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
 }
-extension ViewController: UIScrollViewDelegate {
+extension CameraViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height

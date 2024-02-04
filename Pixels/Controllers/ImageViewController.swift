@@ -53,4 +53,17 @@ class ImageViewController: UIViewController {
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+
+           if isMovingFromParent {
+               // Apply a scaling and translation transformation for the bounce effect during dismissal
+               UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+                   self.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001).translatedBy(x: -self.view.bounds.width, y: 0)
+               }) { _ in
+                   self.view.transform = .identity
+               }
+           }
+       }
 }
